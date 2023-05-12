@@ -11,7 +11,7 @@ To use this code you will need:
 
 # Install and Setup
 
-- Clone the code to local machine.
+- Clone the code to local machine using git or download ZIP and extract
 
 ```
 git clone https://github.com/HusseinOmar/sd-wan-dhcp-viewer.git
