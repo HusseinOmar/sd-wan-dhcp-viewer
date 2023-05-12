@@ -24,15 +24,17 @@ session = vapi()
 # Support Functions
 def printDHCP(i):
     for item in i:
+        print("")
         print('=================================================================================')
         print(f'=> Template Name:   {item["templateName"]}')
         print(f'=> Template ID:     {item["templateId"]}')
-        print('Options Configured: ')
+        print('=> Options Configured: ')
         definition = json.loads(item['templateDefinition'])
         for code in definition["options"]['option-code']['vipValue']:
             print(
                 f' - DHCP Code = {code["code"]["vipValue"]}     ==>     Value = {code["ip"]["vipValue"]}')
     print('=================================================================================')
+    print("")
 
 # Core Functions
 def dhcpTemplates():
@@ -71,8 +73,14 @@ def task2():
             value = ipaddress.ip_address(value_typed)
         except Exception:
             print(f'ERROR: ***{value_typed}*** is not a correct IPv4 or IPv6 address')
-        
-    printDHCP(matchByValue(value))
+    if len(matchByValue(value)) == 0:
+        print("")
+        print("========================================================================")
+        print("=>>> No Match found, please match sure you entered the right IP address")
+        print("========================================================================")
+        print("")
+    else:
+        printDHCP(matchByValue(value))
 
 # Program execution
 def banner():
