@@ -135,9 +135,12 @@ class vAPI():
             'Content-Type': "application/x-www-form-urlencoded",
             'cache-control': "no-cache"
         }
+        print("")
+        print(f"=> Please wait connecting to {self.vmanage_ip}:{self.port} ... ")
         try:
             self.response = requests.request(
                 "POST", url, data=payload, headers=headers, verify=False)
+
         except:
             print('')
             print(f' %% Failed to reach {self.vmanage_ip}:{self.port}')
@@ -154,29 +157,15 @@ class vAPI():
                 print(f'%% Username or Password is wrong')
                 print('')
                 return 1
-        self.cookie = str(self.response.cookies).split(' ')[1]
-        print('--------------------------------------------------------------------')
-        print(
-            f'Authenticated, login to {self.vmanage_ip}:{self.port} is SUCCESSFUL')
-        print('--------------------------------------------------------------------')
-        return 200
-# Step 04: Validate Login Credintials
+            else:
+                self.cookie = str(self.response.cookies).split(' ')[1]
+                print('--------------------------------------------------------------------')
+                print(
+                    f'Authenticated, login to {self.vmanage_ip}:{self.port} is SUCCESSFUL')
+                print('--------------------------------------------------------------------')
+                return 200
 
-    def validateLogin(self):
-        if '<html>' in self.response.text:
-            print('')
-            print(f'%% Username or Password is wrong')
-            print('')
-            return 1
-        else:
-            self.cookie = str(self.response.cookies).split(' ')[1]
-            print('--------------------------------------------------------------------')
-            print(
-                f'Authenticated, login to {self.vmanage_ip}:{self.port} is SUCCESSFUL')
-            print('--------------------------------------------------------------------')
-            return 200
-
-# Step 05: Get Authetication Token
+# Step 04: Get Authetication Token
 
     def getToken(self):
         '''
@@ -194,26 +183,50 @@ class vAPI():
         self.token = self.response.text
 # Do Authentication
 
+    def connectAttempt(self):
+        vAPI.vManageInfo(self)
+        vAPI.loginCred(self)
+        return vAPI.connect(self)
+    def loginAttempt(self):
+        vAPI.loginCred(self)
+        return vAPI.connect(self)
     def auth(self):
-        '''
-        - First method to be called in main App
-        - Returns session cookie and token
-        '''
-        success = 0
-        while success == 0:
-            vAPI.vManageInfo(self)
-            vAPI.loginCred(self)
-            connect = vAPI.connect(self)
-            if connect == 200:
-                break
-            elif connect == 0:
+        while True:
+            attempt = vAPI.connectAttempt(self)
+            if  attempt == 0:
                 continue
-            elif connect == 1:
-                i = 1
-                while i == 1:
-                    vAPI.loginCred(self)
-                    i = vAPI.connect(self)
+            elif attempt == 1:
+                while True:
+                    attempt = vAPI.loginAttempt(self)
+                    if attempt == 1:
+                        continue
+                    if attempt == 200:
+                        break
+                break
+            elif attempt == 200:
+                break
+
         vAPI.getToken(self)
+    # def auth(self):
+    #     '''
+    #     - First method to be called in main App
+    #     - Returns session cookie and token
+    #     '''
+    #     success = 0
+    #     while success == 0:
+    #         vAPI.vManageInfo(self)
+    #         vAPI.loginCred(self)
+    #         connect = vAPI.connect(self)
+    #         if connect == 200:
+    #             break
+    #         elif connect == 0:
+    #             continue
+    #         elif connect == 1:
+    #             i = 1
+    #             while i == 1:
+    #                 vAPI.loginCred(self)
+    #                 i = vAPI.connect(self)
+    #     # vAPI.getToken(self)
 
 #################### API calls Functions #######################
 
