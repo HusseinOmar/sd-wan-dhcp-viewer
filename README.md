@@ -29,7 +29,7 @@ pip install -r requirements.txt
 - Run application file
 
 ```
-python DHCP.py
+python dhcp.py
 ```
 
 # License
