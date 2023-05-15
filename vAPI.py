@@ -60,8 +60,8 @@ class vAPI():
     IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
     or implied.
             |=================================================|
-            | Welcome to SD-WAN vExplore tool                  |
-            | ------------------------------------------      |
+            | Welcome to SD-WAN vAPI tool                     |
+            | ----------------------------------------------- |
             | This tool allows you to visualize the SD-WAN    |
             | template and policy hierarchy                   |
             | This code is under Cisco Sample Code license.   |
